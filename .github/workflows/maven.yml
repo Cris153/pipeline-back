@@ -25,10 +25,9 @@ jobs:
         java-version: '17'
         distribution: 'corretto'
         cache: maven
-    - name: Go the directory
-      run: cd back/
     - name: Build with Maven
       run: mvn clean compile package -DskipTests --file pom.xml
+      working-directory: back/
     - name: Upload JAR
       uses: actions/upload-artifact@v3
       with:
