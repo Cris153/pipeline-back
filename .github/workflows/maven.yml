@@ -25,6 +25,8 @@ jobs:
         java-version: '17'
         distribution: 'corretto'
         cache: maven
+    - name: Purge Maven cache
+      run: mvn dependency:purge-local-repository
     - name: Build with Maven
       run: mvn clean compile package -DskipTests --file pom.xml
       working-directory: back/
