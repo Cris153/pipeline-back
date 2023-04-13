@@ -15,7 +15,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: self-contained
 
     steps:
     - uses: actions/checkout@v3
@@ -28,10 +28,5 @@ jobs:
     - name: Build with Maven
       run: mvn clean compile package -DskipTests --file pom.xml
       working-directory: back/
-    - name: Upload JAR
-      uses: actions/upload-artifact@v3
-      with:
-        name: appback
-        path: back/target/demo-0.0.1-SNAPSHOT.jar
 
     
