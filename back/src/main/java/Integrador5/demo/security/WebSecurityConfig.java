@@ -45,7 +45,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://127.0.0.1:5173", "http://grupo5-c2.s3-website.us-east-2.amazonaws.com")
+                .allowedOrigins("http://127.0.0.1:5173", "http://front-odonto-prueba-pip.s3-website.us-east-2.amazonaws.com")
                 .allowCredentials(true)
                 .allowedMethods("*");
     }
