@@ -39,5 +39,5 @@ jobs:
         fi
 
     - name: Execute JAR File
-      run: nohup java -jar /home/ubuntu/actions-runner/_work/pipeline-back/pipeline-back/back/target/demo-0.0.1-SNAPSHOT.jar > build.log 2>&1 &
+      run: java -jar /home/ubuntu/actions-runner/_work/pipeline-back/pipeline-back/back/target/demo-0.0.1-SNAPSHOT.jar &
       
