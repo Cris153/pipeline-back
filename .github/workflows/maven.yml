@@ -16,7 +16,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'corretto'
-        maven-version: 3.8.5
+        maven-version: 4.0.0
         cache: maven
     - name: Build with Maven
       run: mvn clean compile package -DskipTests --file pom.xml
