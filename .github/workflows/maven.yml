@@ -1,43 +1,39 @@
-name: Spring Boot App CI/CD with Maven
+name: Deploy to AWS EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-  build:
-    name: Build
-    runs-on: self-hosted
-
+  build-and-deploy:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup Java JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: 17
-        distribution: 'corretto'
+      - name: Build Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: my-app:${{ github.sha }}
 
-    - name: Restore Maven cache
-      uses: skjolber/maven-cache-github-action@v1
-      with:
-        step: restore
+      - name: Transfer Docker image to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.IPV4_EC2 }}
+          username: ${{ secrets.AWS_ACCESS_KEY }}
+          key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          source: my-app:${{ github.sha }}
+          target: /home/ubuntu/my-app
 
-    - name: Setup Maven
-      uses: stCarolas/setup-maven@v.4.5
-      with:
-        maven-version: 4.0.0-alpha-5
-
-    - name: Build with Maven
-      run: mvn clean compile package -DskipTests --file pom.xml
-      working-directory: back/
-
-    - name: Kill process on Port:8060
-      run: |
-        if sudo lsof -Pi :8060 -sTCP:LISTEN -t >/dev/null ; then
-          sudo kill $(sudo lsof -t -i:8060) || true
-        fi
-
-      
-      
-      
+      - name: SSH into EC2 and run Docker container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.IPV4_EC2 }}
+          username: ${{ secrets.AWS_ACCESS_KEY }}
+          key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          script: |
+            cd /home/ubuntu/my-app
+            docker run -d -p 8060:8060 my-app:${{ github.sha }}
