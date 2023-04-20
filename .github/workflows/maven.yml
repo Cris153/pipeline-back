@@ -41,7 +41,7 @@ jobs:
           host: ${{ secrets.IPV4_EC2 }}
           username: ${{ secrets.AWS_ACCESS_KEY }}
           key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          source: my-app:${{ github.sha }}
+          source: ./Dockerfile
           target: /home/ubuntu/my-app
 
       - name: SSH into EC2 and run Docker container
