@@ -27,7 +27,7 @@ jobs:
         run: mvn clean compile package -DskipTests --file pom.xml
 
       - name: Build Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4.0.0
         with:
           context: .
           push: false
@@ -41,7 +41,7 @@ jobs:
           host: ${{ secrets.IPV4_EC2 }}
           username: ${{ secrets.AWS_ACCESS_KEY }}
           key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          source: ./Dockerfile
+          source: "."
           target: /home/ubuntu/my-app
 
       - name: SSH into EC2 and run Docker container
